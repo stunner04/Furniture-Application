@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">FurnitureApp</string>
+    <string name="rightAddress">The Right Address\nFor Shopping\nAnyday</string>
+    <string name="quality">It is very easy to reach the\nbest quality ming all the\n products on the internet!</string>
+    <string name="startbtn">Start</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="let_s_login">Let\'s Login</string>
+    <string name="donTHaveAnAccTxt">Don\'t have an account? Register</string>
+    <string name="email_hint">Email</string>
+    <string name="password_hint">Password</string>
+    <string name="forgot_password_login">Forgot Password</string>
+    <string name="facebook_login">Facebook</string>
+    <string name="google_login">Google</string>
+    <string name="letsRegister">Let\'s Register</string>
+    <string name="haveAnAccount">Do you have an account? log in</string>
+    <string name="first_name">First Name</string>
+    <string name="last_name">Last Name</string>
+    <string name="email_register">Email</string>
+    <string name="password_register">Password</string>
+    <string name="reset_password">Reset Password</string>
+    <string name="password_reset_link_tv">We will send you the password reset link to your E-Mail</string>
+    <string name="cancel_dialog">Cancel</string>
+    <string name="reset_send_dialog">Send</string>
+</resources>
