@@ -36,7 +36,6 @@
                 android:text="@string/search_now_search_bar"
                 android:textColor="#87898A"
                 android:textSize="15sp"
-                app:constraintSet="3"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -86,6 +85,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/homeHeader"
+        android:contentDescription="Select product tab"
         app:tabMode="scrollable"
         app:tabIndicator="@null"
         app:tabRippleColor="@color/white"
@@ -97,7 +97,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/tabLayout"
+        app:layout_constraintTop_toBottomOf="@+id/tabLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
