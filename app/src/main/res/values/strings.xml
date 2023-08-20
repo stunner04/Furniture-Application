@@ -22,4 +22,5 @@
     <string name="password_reset_link_tv">We will send you the password reset link to your E-Mail</string>
     <string name="cancel_dialog">Cancel</string>
     <string name="reset_send_dialog">Send</string>
+    <string name="search_now_search_bar">Search Now</string>
 </resources>
