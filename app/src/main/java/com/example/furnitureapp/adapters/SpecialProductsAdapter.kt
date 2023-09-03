@@ -21,6 +21,22 @@ class SpecialProductsAdapter : RecyclerView.Adapter<SpecialProductsAdapter.Speci
             }
         }
 
+        /* GLIDE IMAGE LOADING ERROR trial FIX, LOGCAT-> Due to NOT supported datatype of Product Image URL i.e, List<>
+        fun bind(product: Product) {
+            val imageUrls = ArrayList<String>()
+            binding.apply {
+
+                for (imageUrl in imageUrls) {
+                    Glide.with(itemView)
+                        .load(imageUrl)
+                        .into(imgSpecialRV) // Load each image individually
+                }
+
+                tvSpecialName.text=product.name
+                tvSpecialAdPrice.text=product.price.toString()
+            }
+        }
+         */
     }
 
     private val diffCallback = object: DiffUtil.ItemCallback<Product>(){ // 3
