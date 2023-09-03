@@ -27,6 +27,7 @@
             android:id="@+id/tvSpecialName"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
+            android:maxLines="2"
             android:text="Scotch Premium"
             app:layout_constraintStart_toEndOf="@id/imgSpecialRV"
             app:layout_constraintTop_toTopOf="@id/imgSpecialRV"
