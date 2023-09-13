@@ -15,7 +15,6 @@ import com.example.furnitureapp.databinding.FragmentIntroductionBinding
 import com.example.furnitureapp.viemodel.IntroductionVieModel
 import com.example.furnitureapp.viemodel.IntroductionVieModel.Companion.SHOPPING_ACTIVITY
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.collect
 
 @AndroidEntryPoint
 class IntroductionFragment : Fragment() {
@@ -35,7 +34,7 @@ class IntroductionFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         lifecycleScope.launchWhenStarted {
-            viewModel.navigate.collect() {
+            viewModel.navigate.collect {
                 when (it) {
                     SHOPPING_ACTIVITY -> {
                         Intent(requireActivity(), ShoppingActivity::class.java).also { intent ->
