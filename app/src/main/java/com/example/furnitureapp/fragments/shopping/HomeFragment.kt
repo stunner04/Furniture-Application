@@ -41,6 +41,9 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             FurnitureFragment()
         )
 
+        binding.viewPagerHome.isUserInputEnabled =
+            false // cancels the swipe behaviour of viewpager with the tablayout
+
         val viewpager2Adapter =
             HomeViewpagerAdapter(categoriesFragments, childFragmentManager, lifecycle)
         binding.viewPagerHome.adapter = viewpager2Adapter
