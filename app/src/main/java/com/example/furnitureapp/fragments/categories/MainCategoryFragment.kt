@@ -9,8 +9,11 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.furnitureapp.R
+import com.example.furnitureapp.adapters.BestDealsAdapter
+import com.example.furnitureapp.adapters.BestProductAdapter
 import com.example.furnitureapp.adapters.SpecialProductsAdapter
 import com.example.furnitureapp.databinding.FragmentMainCategoryBinding
 import com.example.furnitureapp.util.Resource
@@ -24,6 +27,8 @@ private const val TAG = "MainCategoryFragment"
 class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
     private lateinit var binding: FragmentMainCategoryBinding
     private lateinit var specialProductAdapter: SpecialProductsAdapter
+    private lateinit var bestDealsAdapter: BestDealsAdapter
+    private lateinit var bestProductAdapter: BestProductAdapter
     private val viewModel by viewModels<MainCategoryViewModel>()
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +42,8 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setUpSpecialProductsRV()
+        setUpBestDealsRV()
+        setUpBestProductsRV()
 
         lifecycleScope.launchWhenStarted {
             viewModel.specialProducts.collectLatest {
@@ -61,14 +68,69 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
             }
         }
 
+        lifecycleScope.launchWhenStarted {
+            viewModel.bestProduct.collectLatest {
+                when (it) {
+                    is Resource.Loading -> {
+                        showLoading()
+                    }
+
+                    is Resource.Success -> {
+                        bestProductAdapter.differ.submitList(it.data)  // updating the Adapter with listsOfProducts from fireStore
+                        hideLoading()
+                    }
+
+                    is Resource.Error -> {
+                        hideLoading()
+                        Log.e(TAG, it.message.toString())
+                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                    }
+
+                    else -> Unit
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewModel.bestDealProduct.collectLatest {
+                when (it) {
+                    is Resource.Loading -> {
+                        showLoading()
+                    }
+
+                    is Resource.Success -> {
+                        bestDealsAdapter.differ.submitList(it.data)  // updating the Adapter with listsOfProducts from fireStore
+                        hideLoading()
+                    }
+
+                    is Resource.Error -> {
+                        hideLoading()
+                        Log.e(TAG, it.message.toString())
+                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
+                    }
+
+                    else -> Unit
+                }
+            }
+        }
     }
 
-    private fun hideLoading() {
-        binding.mainCategoryProgressBar.visibility = View.GONE
+    private fun setUpBestProductsRV() {
+        bestProductAdapter = BestProductAdapter()
+        binding.rvBestProducts.apply {
+            layoutManager =
+                GridLayoutManager(requireContext(), 2, GridLayoutManager.VERTICAL, false)
+            adapter = bestProductAdapter
+        }
     }
 
-    private fun showLoading() {
-        binding.mainCategoryProgressBar.visibility = View.VISIBLE
+    private fun setUpBestDealsRV() {
+        bestDealsAdapter = BestDealsAdapter()
+        binding.rvBestDealProducts.apply {
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            adapter = bestDealsAdapter
+        }
     }
 
     private fun setUpSpecialProductsRV() {
@@ -79,4 +141,13 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
             adapter = specialProductAdapter
         }
     }
+
+    private fun hideLoading() {
+        binding.mainCategoryProgressBar.visibility = View.GONE
+    }
+
+    private fun showLoading() {
+        binding.mainCategoryProgressBar.visibility = View.VISIBLE
+    }
+
 }

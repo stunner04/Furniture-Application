@@ -19,8 +19,16 @@ class MainCategoryViewModel @Inject constructor(
     private val _specialProducts = MutableStateFlow<Resource<List<Product>>>(Resource.Unspecified())
     val specialProducts: StateFlow<Resource<List<Product>>> = _specialProducts
 
+    private val _bestDealProduct = MutableStateFlow<Resource<List<Product>>>(Resource.Unspecified())
+    val bestDealProduct: StateFlow<Resource<List<Product>>> = _bestDealProduct
+
+    private val _bestProduct = MutableStateFlow<Resource<List<Product>>>(Resource.Unspecified())
+    val bestProduct: StateFlow<Resource<List<Product>>> = _bestProduct
+
     init {
         fetchSpecialProducts()  // called inside the init block because we always want to fetch the main category/Home fragment
+        fetchBestDeals()
+        fetchBestProducts()
     }
 
     private fun fetchSpecialProducts() {
@@ -38,6 +46,45 @@ class MainCategoryViewModel @Inject constructor(
             .addOnFailureListener {
                 viewModelScope.launch {
                     _specialProducts.emit(Resource.Error(it.message.toString()))
+                }
+            }
+    }
+
+    private fun fetchBestDeals() {
+        viewModelScope.launch {
+            _bestDealProduct.emit(Resource.Loading())
+        }
+        fireStore.collection("Products").whereEqualTo("category", "Best Deals").get()
+            .addOnSuccessListener { results ->
+                val bestDealsProducts =
+                    results.toObjects(Product::class.java)  // convert results to the product type object
+                viewModelScope.launch {
+                    _bestDealProduct.emit(Resource.Success(bestDealsProducts))
+                }
+            }
+            .addOnFailureListener {
+                viewModelScope.launch {
+                    _bestDealProduct.emit(Resource.Error(it.message.toString()))
+                }
+            }
+    }
+
+    private fun fetchBestProducts() {
+        viewModelScope.launch {
+            _bestProduct.emit(Resource.Loading())
+        }
+        //fireStore.collection("Products").whereEqualTo("category", "Best Deals").get()
+        fireStore.collection("Products").get()
+            .addOnSuccessListener { results ->
+                val bestProducts =
+                    results.toObjects(Product::class.java)  // convert results to the product type object
+                viewModelScope.launch {
+                    _bestProduct.emit(Resource.Success(bestProducts))
+                }
+            }
+            .addOnFailureListener {
+                viewModelScope.launch {
+                    _bestProduct.emit(Resource.Error(it.message.toString()))
                 }
             }
     }
