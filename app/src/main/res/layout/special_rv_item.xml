@@ -42,7 +42,7 @@
             android:id="@+id/tvSpecialAdPrice"
             android:layout_width="80dp"
             android:layout_height="wrap_content"
-            android:text="$1600"
+            android:text="Rs.1600"
             app:layout_constraintStart_toStartOf="@id/tvSpecialName"
             app:layout_constraintTop_toBottomOf="@id/tvSpecialName"
             android:textColor="@color/black"
