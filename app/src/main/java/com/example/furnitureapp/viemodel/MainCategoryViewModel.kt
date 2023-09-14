@@ -25,6 +25,8 @@ class MainCategoryViewModel @Inject constructor(
     private val _bestProduct = MutableStateFlow<Resource<List<Product>>>(Resource.Unspecified())
     val bestProduct: StateFlow<Resource<List<Product>>> = _bestProduct
 
+    private val pagingInfo = PagingInfo()
+
     init {
         fetchSpecialProducts()  // called inside the init block because we always want to fetch the main category/Home fragment
         fetchBestDeals()
@@ -69,23 +71,37 @@ class MainCategoryViewModel @Inject constructor(
             }
     }
 
-    private fun fetchBestProducts() {
-        viewModelScope.launch {
-            _bestProduct.emit(Resource.Loading())
+    fun fetchBestProducts() {
+        if (!pagingInfo.isPagingEnd)  // if paging of 10 items ended then execution  call for next 10
+        {
+            viewModelScope.launch {
+                _bestProduct.emit(Resource.Loading())
+            }
+            //fireStore.collection("Products").whereEqualTo("category", "Best Deals").get()
+            fireStore.collection("Products").limit(pagingInfo.bestProductPage * 10).get()
+                .addOnSuccessListener { results ->
+                    val bestProducts =
+                        results.toObjects(Product::class.java)  // convert results to the product type object
+                    pagingInfo.isPagingEnd =
+                        bestProducts == pagingInfo.oldBestProducts //  comparing  the old product list with the current one to check the both list is same or not
+                    pagingInfo.oldBestProducts = bestProducts // update the oldBestProduct
+                    viewModelScope.launch {
+                        _bestProduct.emit(Resource.Success(bestProducts))
+                    }
+                    pagingInfo.bestProductPage++
+                }
+                .addOnFailureListener {
+                    viewModelScope.launch {
+                        _bestProduct.emit(Resource.Error(it.message.toString()))
+                    }
+                }
         }
-        //fireStore.collection("Products").whereEqualTo("category", "Best Deals").get()
-        fireStore.collection("Products").get()
-            .addOnSuccessListener { results ->
-                val bestProducts =
-                    results.toObjects(Product::class.java)  // convert results to the product type object
-                viewModelScope.launch {
-                    _bestProduct.emit(Resource.Success(bestProducts))
-                }
-            }
-            .addOnFailureListener {
-                viewModelScope.launch {
-                    _bestProduct.emit(Resource.Error(it.message.toString()))
-                }
-            }
     }
+
+    //PAGING Implementation for best products recyclerview
+    internal data class PagingInfo(
+        var bestProductPage: Long = 1,
+        var oldBestProducts: List<Product> = emptyList(),
+        var isPagingEnd: Boolean = false
+    )
 }
