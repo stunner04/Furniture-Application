@@ -15,7 +15,13 @@ import com.example.furnitureapp.databinding.FragmentBaseCategoryBinding
 
 open class BaseCategoryFragment : Fragment(R.layout.fragment_base_category) {
     private lateinit var binding: FragmentBaseCategoryBinding
-
+ /*
+ * Base fragment is root for all the child categories like chair, table, furniture, cupboard, accessory.
+ * I have setup the adapter and paging here for the offer product and best product for every child so that
+ * in child  fragment like  chair only the display function needs to be written.
+ * Category viewmodel is the viewmodel for the Basecategory fragment whose instance is used in child fragment like chair
+ * to display items.
+ * */
     protected val offerAdapter: BestProductAdapter by lazy { BestProductAdapter() }
     protected val bestProductAdapter: BestProductAdapter by lazy { BestProductAdapter() }
 

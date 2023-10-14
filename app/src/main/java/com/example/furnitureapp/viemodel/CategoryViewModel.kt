@@ -10,6 +10,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
+/*
+* Category viewmodel is for the Basecategory fragment whose instance(viewmodel) is used in child fragment like chair
+* to display items.
+* */
+
 class CategoryViewModel constructor(
     private val firestore: FirebaseFirestore,
     private val category : Category
