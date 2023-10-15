@@ -10,6 +10,7 @@ import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.furnitureapp.R
@@ -18,6 +19,7 @@ import com.example.furnitureapp.adapters.BestProductAdapter
 import com.example.furnitureapp.adapters.SpecialProductsAdapter
 import com.example.furnitureapp.databinding.FragmentMainCategoryBinding
 import com.example.furnitureapp.util.Resource
+import com.example.furnitureapp.util.showBottomNavigationView
 import com.example.furnitureapp.viemodel.MainCategoryViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -46,6 +48,32 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
         setUpBestDealsRV()
         setUpBestProductsRV()
 
+        /* 2-> From RV's to productDetailFragment*/
+        specialProductAdapter.onClick = {
+            // This bundle have the all product class details of the selected product and store in key value pair in b
+            val b = Bundle().apply {
+                putParcelable("product", it)
+            }
+            // Passing the selected product from the home fragment to the productdetail fragment where it is used as source
+            // of data to setup recyclerview, viewpager and textviews for the particular product.
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment, b)
+        }
+
+        bestDealsAdapter.onClick = {
+            val b = Bundle().apply {
+                putParcelable("product", it)
+            }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment, b)
+        }
+
+        bestProductAdapter.onClick = {
+            val b = Bundle().apply {
+                putParcelable("product", it)
+            }
+            findNavController().navigate(R.id.action_homeFragment_to_productDetailsFragment, b)
+        }
+
+        /* 1-> From firebase to RV's*/
         lifecycleScope.launchWhenStarted {
             viewModel.specialProducts.collectLatest {
                 when (it) {
@@ -91,13 +119,12 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
                 }
             }
             // detecting the 10 items loaded successfully and next 20 items need to get called when reaches the end
-            binding.nestedScrollMainCategory.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener{v,_,scrollY,_,_ ->
-               // Log.i("MainFraGment","${"SCROLLING reached"}")
-                 if(v.getChildAt(0).bottom <= v.height + scrollY)
-                 {
-                     //Log.i("MainFraGment","${"SCROLLED DETECTED"}")
+            binding.nestedScrollMainCategory.setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
+                // Log.i("MainFraGment","${"SCROLLING reached"}")
+                if (v.getChildAt(0).bottom <= v.height + scrollY) {
+                    //Log.i("MainFraGment","${"SCROLLED DETECTED"}")
                     viewModel.fetchBestProducts()
-                 }
+                }
             })
         }
 
@@ -160,4 +187,8 @@ class MainCategoryFragment : Fragment(R.layout.fragment_main_category) {
         binding.mainCategoryProgressBar.visibility = View.VISIBLE
     }
 
+    override fun onResume() {
+        super.onResume()
+        showBottomNavigationView()
+    }
 }
