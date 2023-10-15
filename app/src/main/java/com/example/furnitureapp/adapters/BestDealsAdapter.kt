@@ -58,6 +58,9 @@ class BestDealsAdapter : RecyclerView.Adapter<BestDealsAdapter.BestDealViewHolde
     override fun onBindViewHolder(holder: BestDealViewHolder, position: Int) {
         val product = differ.currentList[position]
         holder.bind(product)
+        holder.itemView.setOnClickListener {
+            onClick?.invoke(product)
+        }
     }
-
+    var onClick:((Product)->Unit)? = null
 }
