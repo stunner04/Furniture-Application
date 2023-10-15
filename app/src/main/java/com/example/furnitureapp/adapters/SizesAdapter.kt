@@ -21,12 +21,12 @@ class SizesAdapter : RecyclerView.Adapter<SizesAdapter.SizesViewHolder>() { // 1
             if (positon == selectedPosition) // size is selected
             {
                 binding.apply {
-                    imageColor.visibility = View.VISIBLE
+                    imageShadow.visibility = View.VISIBLE
                 }
             } else // // size is not selected
             {
                 binding.apply {
-                    imageColor.visibility = View.INVISIBLE
+                    imageShadow.visibility = View.INVISIBLE
                 }
             }
         }
