@@ -137,7 +137,7 @@
                     android:textColor="@color/black" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rvSize"
+                    android:id="@+id/rv_sizes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content" />
 
@@ -150,13 +150,12 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/mediumButtonHeight"
             android:layout_marginTop="45dp"
-            android:text="@string/addtocart"
-            app:spinning_bar_color="@color/white"
             android:layout_marginBottom="20dp"
+            android:text="@string/addtocart"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/linearProductPref"
             app:layout_constraintStart_toStartOf="@id/linearProductPref"
-            app:layout_constraintTop_toBottomOf="@+id/linearProductPref" />
+            app:spinning_bar_color="@color/white" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.core.widget.NestedScrollView>
