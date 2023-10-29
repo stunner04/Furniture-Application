@@ -4,8 +4,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.adapters.LinearLayoutBindingAdapter
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,11 +17,17 @@ import com.example.furnitureapp.activities.ShoppingActivity
 import com.example.furnitureapp.adapters.ColorsAdapter
 import com.example.furnitureapp.adapters.SizesAdapter
 import com.example.furnitureapp.adapters.ViewPager2ImagesAdapter
+import com.example.furnitureapp.data.CartProduct
 import com.example.furnitureapp.databinding.FragmentProductDetailsBinding
+import com.example.furnitureapp.util.Resource
 import com.example.furnitureapp.util.hideBottomNavigationView
+import com.example.furnitureapp.viemodel.DetailsViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 
+@AndroidEntryPoint
 class ProductDetailsFragment : Fragment() {
 
     private val args by navArgs<ProductDetailsFragmentArgs>()
@@ -26,6 +35,11 @@ class ProductDetailsFragment : Fragment() {
     private val viewPager2ImagesAdapter by lazy { ViewPager2ImagesAdapter() }
     private val sizesAdapter by lazy { SizesAdapter() }
     private val colorsAdapter by lazy { ColorsAdapter() }
+
+    // For ADD TO CART functionality
+    private var selectedColor: Int? = null
+    private var selectedSize: String? = null
+    private val viewmodel by viewModels<DetailsViewModel> ()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -52,6 +66,43 @@ class ProductDetailsFragment : Fragment() {
         binding.imageClose.setOnClickListener {
             findNavController().navigateUp()
         }
+
+        // selecting the size on clicking the sizes RV list
+        sizesAdapter.onItemClick ={
+            selectedSize = it
+        }
+
+        // selecting the color on clicking the colors RV list
+        colorsAdapter.onItemClick = {
+            selectedColor = it
+        }
+
+        // Click Listener for the ADD TO CART btn
+        binding.btnAddToCart.setOnClickListener {
+            // We can add If else statements for the ENFORCING THE SELECTION of the products then it will be added only.
+            viewmodel.addUpdateProductInCart(CartProduct(product,1,selectedColor,selectedSize))
+        }
+
+        lifecycleScope.launchWhenStarted {
+            viewmodel.addToCart.collectLatest {
+                when(it)
+                {
+                    is Resource.Loading -> {
+                        binding.btnAddToCart.startAnimation()
+                    }
+                    is Resource.Success -> {
+                        binding.btnAddToCart.revertAnimation()
+                        binding.btnAddToCart.setBackgroundColor(resources.getColor(R.color.black))
+                    }
+                    is Resource.Error -> {
+                        binding.btnAddToCart.stopAnimation()
+                        Toast.makeText(requireContext(),it.message,Toast.LENGTH_SHORT).show()
+                    }
+                    else -> Unit
+                }
+            }
+        }
+
         // Display the data by submitting the list to RV and setup the textview.
         binding.apply {
             tvProductName.text = product.name
