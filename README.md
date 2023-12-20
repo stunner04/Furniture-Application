@@ -13,6 +13,6 @@ The user can access the top 10 furniture items along with their prices, discount
 
 **Database:** Firebase 
 
-**Architecture:** Model View ViewModel
+**Architecture:** Model View ViewModel (MVVM)
 
 **Asynchronous programming:** Kotlin Coroutines (Basic)
