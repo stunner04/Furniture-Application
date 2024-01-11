@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.bumptech.glide.Glide
 import com.example.furnitureapp.data.Product
 import com.example.furnitureapp.databinding.BestDealsRvItemBinding
+import com.example.furnitureapp.util.formatPrice
 
 class BestDealsAdapter : RecyclerView.Adapter<BestDealsAdapter.BestDealViewHolder>() {
 
@@ -20,9 +21,9 @@ class BestDealsAdapter : RecyclerView.Adapter<BestDealsAdapter.BestDealViewHolde
                 Glide.with(itemView).load(product.images[0]).into(imgBestDeal)
                 product.offerPercentage?.let {
                     val remainingPricePercentage = 1f - it
-                    val priceAfterOffer = remainingPricePercentage * (product.price)
-                    tvNewPrice.text =
-                        "Rs. ${String.format("%.2f", priceAfterOffer)}"  // Rs. 13.93456 to Rs. 3.93
+                    val priceAfterOffer = (remainingPricePercentage * (product.price)).formatPrice()
+                    tvNewPrice.text = priceAfterOffer
+                       // "Rs. ${String.format("%.2f", priceAfterOffer)}"  // Rs. 3.93456 to Rs. 3.93
                     tvOldPrice.paintFlags =
                         Paint.STRIKE_THRU_TEXT_FLAG // strike through the text (old price)
                 }
