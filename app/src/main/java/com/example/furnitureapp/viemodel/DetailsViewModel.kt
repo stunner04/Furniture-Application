@@ -16,7 +16,7 @@ import javax.inject.Inject
 @HiltViewModel
 class DetailsViewModel @Inject constructor(
     private val fireStore: FirebaseFirestore,
-    val auth: FirebaseAuth,
+    private val auth: FirebaseAuth,
     private val firebaseCommon: FirebaseCommon
 ) : ViewModel() {
 
@@ -33,7 +33,7 @@ class DetailsViewModel @Inject constructor(
             _addToCart.emit(Resource.Loading())
         }
         fireStore.collection("user").document(auth.uid!!).collection("cart")
-            .whereEqualTo("product.id", cartProduct.product.id).get()
+            .whereEqualTo("product.id", cartProduct.product.id).get()// Comparison between the product already present and product to be added
             .addOnSuccessListener {
                 it.documents.let {
                     if (it.isEmpty()) { // If Sub Collection is empty first then add a new collection to it
@@ -63,7 +63,7 @@ class DetailsViewModel @Inject constructor(
         firebaseCommon.addProductToCart(cartProduct) { addedProduct, e ->
             viewModelScope.launch {
                 if (e == null) {
-                    _addToCart.emit(Resource.Success(addedProduct))
+                    _addToCart.emit(Resource.Success(addedProduct!!))
                 } else {
                     _addToCart.emit(Resource.Error(e.message.toString()))
                 }
