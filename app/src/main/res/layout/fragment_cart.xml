@@ -58,18 +58,29 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.74" />
+            app:layout_constraintGuide_percent="0.76" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvCart"
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cardViewCart"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="5dp"
+            android:padding="2dp"
+            android:elevation="1000dp"
+            android:clipToPadding="true"
+            app:cardCornerRadius="5dp"
+            app:cardUseCompatPadding="true"
             app:layout_constraintBottom_toTopOf="@id/bottomGuideLine"
             app:layout_constraintEnd_toEndOf="@id/rightGuideLine"
             app:layout_constraintStart_toStartOf="@id/leftGuideLine"
-            app:layout_constraintTop_toBottomOf="@id/progressbarCart"
-            tools:listitem="@layout/cart_product_item" />
+            app:layout_constraintTop_toBottomOf="@id/progressbarCart">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvCart"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                tools:listitem="@layout/cart_product_item" />
+        </androidx.cardview.widget.CardView>
 
 
         <com.google.android.material.progressindicator.LinearProgressIndicator
@@ -133,14 +144,15 @@
             style="@style/blueButtonStyle"
             android:layout_width="0dp"
             android:layout_height="50dp"
-            android:layout_marginTop="40dp"
+            android:layout_marginTop="35dp"
             android:text="Check out"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="@id/rightGuideLine"
+            app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="@id/leftGuideLine"
             app:layout_constraintTop_toBottomOf="@id/totalBoxContainer"
+            app:layout_constraintVertical_bias="0.515"
             app:spinning_bar_color="@color/white" />
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/layoutCartEmpty"
@@ -155,9 +167,9 @@
                 android:layout_height="250dp"
                 android:src="@drawable/ic_empty_box_texture"
                 app:layout_constraintBottom_toBottomOf="@id/imageEmptyBox"
-                app:layout_constraintTop_toTopOf="@id/imageEmptyBox"
+                app:layout_constraintEnd_toEndOf="@id/imageEmptyBox"
                 app:layout_constraintStart_toStartOf="@id/imageEmptyBox"
-                app:layout_constraintEnd_toEndOf="@id/imageEmptyBox"/>
+                app:layout_constraintTop_toTopOf="@id/imageEmptyBox" />
 
             <ImageView
                 android:id="@+id/imageEmptyBox"
@@ -179,10 +191,9 @@
                 android:text="Your shopping cart is empty"
                 android:textColor="@color/black"
                 android:textSize="15sp"
-                app:layout_constraintTop_toBottomOf="@id/imageEmptyBoxTexture"
+                app:layout_constraintEnd_toEndOf="@id/imageEmptyBoxTexture"
                 app:layout_constraintStart_toStartOf="@id/imageEmptyBoxTexture"
-                app:layout_constraintEnd_toEndOf="@id/imageEmptyBoxTexture"/>
-
+                app:layout_constraintTop_toBottomOf="@id/imageEmptyBoxTexture" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
