@@ -4,13 +4,17 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.furnitureapp.data.CartProduct
 import com.example.furnitureapp.firebase.FirebaseCommon
+import com.example.furnitureapp.helper.getProductPrice
 import com.example.furnitureapp.util.Resource
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -28,6 +32,39 @@ class CartViewModel @Inject constructor(
     private val _cartProducts =
         MutableStateFlow<Resource<List<CartProduct>>>(Resource.Unspecified())
     val cartProducts = _cartProducts.asStateFlow()
+
+    // The resulting productsPrice will be a list of Float? where each element corresponds to the result of [calculatePrice] or null if the Resource is not a success.
+    val productsPrice = cartProducts.map {
+        when (it) {
+            is Resource.Success -> {
+
+                calculatePrice(it.data!!)
+            }
+
+            else -> null
+        }
+    }
+
+    // Inside the function, it uses the sumByDouble function to calculate the total price based on the product price, offer percentage, and quantity for each CartProduct
+    private fun calculatePrice(data: List<CartProduct>): Float {
+        return data.sumByDouble { cartProduct ->
+            (cartProduct.product.offerPercentage.getProductPrice(cartProduct.product.price) * cartProduct.quantity).toDouble()
+        }.toFloat()
+    }
+
+    // To showing the dialog in the cart when the quantity of a product becomes  < 1
+    private val _deleteDialog = MutableSharedFlow<CartProduct>()
+    val deleteDialog = _deleteDialog.asSharedFlow()
+
+    // When Quantity becomes 0 delete the product/document from the cart of the user
+    fun deleteCartProduct(cartProduct: CartProduct) {
+        val index = cartProducts.value.data?.indexOf(cartProduct)
+        if (index != null && index != -1) {
+            val documentId = cartProductsDocuments[index].id
+            firestore.collection("user").document(auth.uid!!).collection("cart")
+                .document(documentId).delete()
+        }
+    }
 
     init {
         getCartProducts()
@@ -51,18 +88,27 @@ class CartViewModel @Inject constructor(
         cartProduct: CartProduct,
         quantityChanging: FirebaseCommon.QuantityChanging
     ) {
+        // Get the index of the product in the list so that we can get the documentID of the product to pass in the decrement and increment functions as parameter
         val index = cartProducts.value.data?.indexOf(cartProduct)
+
         /**
          * If the user spams the + or - button [getCartProducts] doest not guarantees that it will fetch the cartProducts
          * So, we used index == -1 if the document in the cart collection is empty or not. There will no crash of app.
          */
         if (index != -1 && index != null) {
             val documentId = cartProductsDocuments[index].id
-            when(quantityChanging){
+            when (quantityChanging) {
                 FirebaseCommon.QuantityChanging.INCREASE -> {
+                    viewModelScope.launch { _cartProducts.emit(Resource.Loading()) }
                     increaseQuantity(documentId)
                 }
+
                 FirebaseCommon.QuantityChanging.DECREASE -> {
+                    if (cartProduct.quantity == 1) {
+                        viewModelScope.launch { _deleteDialog.emit(cartProduct) }
+                        return
+                    }
+                    viewModelScope.launch { _cartProducts.emit(Resource.Loading()) }
                     decreaseQuantity(documentId)
                 }
             }
@@ -70,18 +116,16 @@ class CartViewModel @Inject constructor(
     }
 
     private fun decreaseQuantity(documentId: String) {
-        firebaseCommon.decreaseQuantity(documentId){
-            result,exception->
-            if (exception!=null){
+        firebaseCommon.decreaseQuantity(documentId) { result, exception ->
+            if (exception != null) {
                 viewModelScope.launch { _cartProducts.emit(Resource.Error(exception.message.toString())) }
             }
         }
     }
 
     private fun increaseQuantity(documentId: String) {
-        firebaseCommon.increaseQuantity(documentId){
-            result,exception ->
-            if(exception!=null){
+        firebaseCommon.increaseQuantity(documentId) { result, exception ->
+            if (exception != null) {
                 viewModelScope.launch { _cartProducts.emit(Resource.Error(exception.message.toString())) }
             }
         }
