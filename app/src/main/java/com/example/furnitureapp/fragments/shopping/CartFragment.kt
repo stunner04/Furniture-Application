@@ -42,11 +42,12 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
         super.onViewCreated(view, savedInstanceState)
 
         setupCartRV()
-
+        var totalPrice = 0f
         // display the product price
         lifecycleScope.launchWhenStarted {
             viewModel.productsPrice.collectLatest { price ->
                 price?.let {
+                    totalPrice = it
                     binding.tvTotalPrice.text = it.formatPrice()
                 }
 
@@ -67,6 +68,15 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
         // Decrement the quantity of a product
         cartAdapter.onMinusClick = {
             viewModel.changeQuantity(it, FirebaseCommon.QuantityChanging.DECREASE)
+        }
+
+        // Sending the cart products to billing fragments with total price
+        binding.buttonCheckout.setOnClickListener {
+            val action = CartFragmentDirections.actionCartFragmentToBillingFragment(
+                totalPrice,
+                cartAdapter.differ.currentList.toTypedArray()
+            )
+            findNavController().navigate(action)
         }
 
         // Display the AlertDialog Box when the quantity reaches < 1
