@@ -9,7 +9,7 @@ import kotlinx.android.parcel.Parcelize
 */
 
 @Parcelize
-class CartProduct(
+data class CartProduct(
     val product: Product,
     var quantity: Int,
     val selectedColor: Int? = null,
@@ -22,19 +22,6 @@ class CartProduct(
     }
 
     constructor() : this(Product(), 1, null, null)
-
-    /* Extension function FOR COPY() USED IN FirebaseCommon class */
-//    companion object {
-//        fun CartProduct.copy(quantity: Int): CartProduct {
-//            return CartProduct(
-//                this.product.copy(), // Make a copy of the product object
-//                quantity,
-//                this.selectedColor,
-//                this.selectedSize
-//            )
-//        }
-//    }
-
 
 }
 

@@ -36,7 +36,7 @@ class FirebaseCommon(
             val productObject = document.toObject(CartProduct::class.java)
             productObject?.let { cartProduct ->
                 val newQuantity = cartProduct.quantity + 1
-                val newProductObject = cartProduct.copy(newQuantity)
+                val newProductObject = cartProduct.copy(quantity = newQuantity)
                 transaction.set(documentRef, newProductObject)
             }
         }
@@ -55,7 +55,7 @@ class FirebaseCommon(
             val productObject = document.toObject(CartProduct::class.java)
             productObject?.let { cartProduct ->
                 val newQuantity = cartProduct.quantity - 1
-                val newProductObject = cartProduct.copy(newQuantity)
+                val newProductObject = cartProduct.copy(quantity = newQuantity)
                 transaction.set(documentRef, newProductObject)
             }
         }
