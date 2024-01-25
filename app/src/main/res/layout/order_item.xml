@@ -40,8 +40,9 @@
                 tools:text="45689097557" />
 
             <ImageView
-                android:layout_width="15dp"
-                android:layout_height="15dp"
+                android:id="@+id/imgOrderDetail"
+                android:layout_width="16.5dp"
+                android:layout_height="16.5dp"
                 android:src="@drawable/ic_arrow" />
 
         </LinearLayout>
