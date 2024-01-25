@@ -31,6 +31,9 @@ class OrdersAllAdapter : RecyclerView.Adapter<OrdersAllAdapter.OrdersViewHolder>
                     is OrderStatus.Returned -> ColorDrawable(resources.getColor(R.color.g_red))
                 }
                 imageOrderState.setImageDrawable(colorDrawable)
+                imgOrderDetail.setOnClickListener {
+                    onClick?.invoke(order)
+                }
             }
         }
     }
@@ -62,9 +65,6 @@ class OrdersAllAdapter : RecyclerView.Adapter<OrdersAllAdapter.OrdersViewHolder>
     override fun onBindViewHolder(holder: OrdersViewHolder, position: Int) {
         val order = differ.currentList[position]
         holder.bind(order)
-        holder.itemView.setOnClickListener {
-            onClick?.invoke(order)
-        }
     }
 
     var onClick: ((Order) -> Unit)? = null
