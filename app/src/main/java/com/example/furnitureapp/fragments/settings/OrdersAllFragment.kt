@@ -8,10 +8,12 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavArgs
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.furnitureapp.adapters.OrdersAllAdapter
+import com.example.furnitureapp.data.orders.Order
 import com.example.furnitureapp.databinding.FragmentOrdersBinding
 import com.example.furnitureapp.util.Resource
 import com.example.furnitureapp.viemodel.OrdersAllGetViewModel
@@ -24,6 +26,7 @@ class OrdersAllFragment : Fragment() {
     private lateinit var binding: FragmentOrdersBinding
     private val ordersViewModel by viewModels<OrdersAllGetViewModel>()
     private val ordersAllAdapter by lazy { OrdersAllAdapter() }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -75,6 +78,11 @@ class OrdersAllFragment : Fragment() {
             }
         }
 
+        // Sending all orders of a user from All Orders to OrderDetails Fragment
+        ordersAllAdapter.onClick = {
+            val action = OrdersAllFragmentDirections.actionOrdersFragmentToOrderDetailFragment(it)
+            findNavController().navigate(action)
+        }
     }
 
     // SetUp OrdersRV
