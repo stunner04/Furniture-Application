@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/shopping_graph"
-    app:startDestination="@id/userAccountFragment">
+    app:startDestination="@id/homeFragment">
 
     <fragment
         android:id="@+id/cartFragment"
@@ -32,8 +32,14 @@
         android:label="ProfileFragment"
         tools:layout="@layout/fragment_profile" >
         <action
-            android:id="@+id/action_profileFragment_to_addressFragment"
-            app:destination="@id/addressFragment" />
+            android:id="@+id/action_profileFragment_to_userAccountFragment"
+            app:destination="@id/userAccountFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_ordersFragment"
+            app:destination="@id/ordersFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_billingFragment"
+            app:destination="@id/billingFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
@@ -58,7 +64,13 @@
         android:name="com.example.furnitureapp.fragments.shopping.AddressFragment"
         android:label="AddressFragment"
         tools:layout="@layout/fragment_address"
-        />
+        >
+        <argument
+            android:name="address"
+            app:argType="com.example.furnitureapp.data.Address"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
     <fragment
         android:id="@+id/billingFragment"
         android:name="com.example.furnitureapp.fragments.shopping.BillingFragment"
@@ -73,10 +85,31 @@
         <argument
             android:name="billingProducts"
             app:argType="com.example.furnitureapp.data.CartProduct[]" />
+        <argument
+            android:name="payment"
+            app:argType="boolean" />
     </fragment>
     <fragment
         android:id="@+id/userAccountFragment"
         android:name="com.example.furnitureapp.fragments.settings.UserAccountFragment"
         tools:layout="@layout/fragment_user_account"
         android:label="UserAccountFragment" />
+    <fragment
+        android:id="@+id/ordersFragment"
+        tools:layout="@layout/fragment_orders"
+        android:name="com.example.furnitureapp.fragments.settings.OrdersAllFragment"
+        android:label="OrdersFragment" >
+        <action
+            android:id="@+id/action_ordersFragment_to_orderDetailFragment"
+            app:destination="@id/orderDetailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/orderDetailFragment"
+        android:name="com.example.furnitureapp.fragments.settings.OrderDetailFragment"
+        tools:layout="@layout/fragment_order_detail"
+        android:label="OrderDetailFragment" >
+        <argument
+            android:name="order"
+            app:argType="com.example.furnitureapp.data.orders.Order" />
+    </fragment>
 </navigation>

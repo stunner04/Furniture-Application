@@ -69,6 +69,16 @@ class BillingFragment : Fragment(R.layout.fragment_billing) {
         setUpBillingProductsRV()
         setUpAddressRV()
 
+        // View Handling : When we navigate to billings from profile then we don't need the total price and products
+        if (!args.payment) {
+            binding.apply {
+                buttonPlaceOrder.visibility = View.INVISIBLE
+                totalBoxContainer.visibility = View.INVISIBLE
+                middleLine.visibility = View.INVISIBLE
+                bottomLine.visibility = View.INVISIBLE
+            }
+        }
+
         // Navigate back to Cart Fragment
         binding.imageCloseBilling.setOnClickListener {
             findNavController().navigateUp()
@@ -143,6 +153,13 @@ class BillingFragment : Fragment(R.layout.fragment_billing) {
         // To select the address from the address list
         addressAdapter.onClick = {
             selectedAddress = it
+            // If address selected when navigated from the profile fragment then only onclick navigate to the addressFragment
+            if (!args.payment) {
+                val bundle = Bundle().apply {
+                    putParcelable("address", selectedAddress)
+                }
+                findNavController().navigate(R.id.action_billingFragment_to_addressFragment, bundle)
+            }
         }
 
         // Showing the dialog for placing order confirmation if address is selected

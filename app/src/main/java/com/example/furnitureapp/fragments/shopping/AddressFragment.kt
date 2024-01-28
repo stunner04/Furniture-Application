@@ -22,8 +22,7 @@ import kotlinx.coroutines.flow.collectLatest
 class AddressFragment() : Fragment(R.layout.fragment_address) {
     private lateinit var binding: FragmentAddressBinding
     private val viewModel by viewModels<AddressViewModel>()
-
-    //val args by navArgs<AddressFragmentArgs>()
+    private val args by navArgs<AddressFragmentArgs>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -91,18 +90,27 @@ class AddressFragment() : Fragment(R.layout.fragment_address) {
                 binding.progressbarAddress.visibility = View.INVISIBLE
             }
         }
-
-
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        val address = args.address
-//        if(address == null){
-//            binding.apply {
-//                buttonDelelte.visibility = View.GONE
-//            }
+        val address = args.address
+        // Setting the address got from the billing fragment upon selection in the list of addresses
+        if (address == null) {
+            binding.apply {
+                buttonDelete.visibility = View.GONE
+            }
+        } else {
+            binding.apply {
+                edAddressTitle.setText(address.addressTitle)
+                edFullName.setText(address.fullName)
+                edStreet.setText(address.street)
+                edPhone.setText(address.phone)
+                edCity.setText(address.city)
+                edState.setText(address.state)
+            }
+        }
 
         // Extract the address details and call the addAddress to store in firestore on clicking SAVE_BUTTON
         binding.apply {
