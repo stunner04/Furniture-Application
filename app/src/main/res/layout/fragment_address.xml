@@ -6,15 +6,14 @@
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbarAddresses"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="?actionBarSize"
         app:layout_constraintEnd_toEndOf="@id/guideline2"
         app:layout_constraintStart_toStartOf="@id/guideline1"
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_marginTop="1dp"
             android:layout_height="match_parent">
 
             <ImageView
@@ -33,11 +32,12 @@
                 android:id="@+id/tvPaymentMethods"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
+                android:layout_marginStart="8dp"
+                android:paddingStart="3dp"
                 android:text="Save Address"
                 android:paddingTop="3dp"
                 android:fontFamily="@font/poppins_light"
-                android:textSize="20sp"
+                android:textSize="25sp"
                 android:textColor="@color/black"
                 app:layout_constraintBottom_toBottomOf="@+id/imageAddressClose"
                 app:layout_constraintStart_toEndOf="@id/imageAddressClose"
@@ -51,7 +51,6 @@
         android:id="@+id/topLine"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:layout_marginTop="10dp"
         android:background="@drawable/white_background"
         android:backgroundTint="@color/g_blue_gray200"
         app:layout_constraintEnd_toEndOf="@id/guideline2"
@@ -73,7 +72,7 @@
         app:layout_constraintEnd_toEndOf="@id/guideline2"
         app:layout_constraintStart_toStartOf="@id/guideline1"
         app:layout_constraintTop_toBottomOf="@+id/topLine"
-        android:layout_marginTop="15dp"/>
+        android:layout_marginTop="20dp"/>
 
     <EditText
         android:id="@+id/edFullName"
@@ -182,7 +181,7 @@
         android:orientation="horizontal">
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/buttonDelelte"
+            android:id="@+id/buttonDelete"
             android:layout_width="0dp"
             android:layout_height="40dp"
             android:layout_marginBottom="20dp"
