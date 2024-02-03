@@ -59,7 +59,7 @@ class AddressFragment() : Fragment(R.layout.fragment_address) {
             }
         }
 
-        /*
+        // // Handling the UI changes when the user Deletes address
         lifecycleScope.launchWhenStarted {
             viewModel.deleteAddress.collectLatest {
                 when (it) {
@@ -81,7 +81,7 @@ class AddressFragment() : Fragment(R.layout.fragment_address) {
                 }
             }
         }
-*/
+
 
         // Error Toast will be prompted
         lifecycleScope.launchWhenStarted {
@@ -98,6 +98,7 @@ class AddressFragment() : Fragment(R.layout.fragment_address) {
         val address = args.address
         // Setting the address got from the billing fragment upon selection in the list of addresses
         if (address == null) {
+            // when adding the new address delete_btn becomes invisible
             binding.apply {
                 buttonDelete.visibility = View.GONE
             }
@@ -128,11 +129,11 @@ class AddressFragment() : Fragment(R.layout.fragment_address) {
             }
         }
 
-//        binding.buttonDelelte.setOnClickListener {
-//            val address = args.address
-//            if (address != null) {
-//                viewModel.deleteAddress(address)
-//            }
-//        }
+        binding.buttonDelete.setOnClickListener {
+            val address = args.address
+            if (address != null) {
+                viewModel.deleteAddress(address)
+            }
+        }
     }
 }

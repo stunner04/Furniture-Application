@@ -23,8 +23,8 @@ class AddressViewModel @Inject constructor(
     private val _addNewAddress = MutableStateFlow<Resource<Address>>(Resource.Unspecified())
     val addNewAddress = _addNewAddress.asStateFlow()
 
-//    private val _deleteAddress = MutableStateFlow<Resource<Address>>(Resource.Unspecified())
-//    val deleteAddress = _deleteAddress.asStateFlow()
+    private val _deleteAddress = MutableStateFlow<Resource<Address>>(Resource.Unspecified())
+    val deleteAddress = _deleteAddress.asStateFlow()
 
     // If validation check fails then the error prompted on screen (Once only)
     private val _error = MutableSharedFlow<String>()
@@ -60,16 +60,17 @@ class AddressViewModel @Inject constructor(
                 address.state.trim().isEmpty()
     }
 
-//    fun deleteAddress(address: Address) {
-//
-//        viewModelScope.launch { _deleteAddress.emit(Resource.Loading()) }
-//
-//        firestore.collection("user").document(auth.uid!!).collection("address")
-//            .document(address.addressTitle)
-//            .delete().addOnSuccessListener {
-//                viewModelScope.launch { _deleteAddress.emit(Resource.Success(address)) }
-//            }.addOnFailureListener {
-//                viewModelScope.launch { _deleteAddress.emit(Resource.Error(it.message.toString())) }
-//            }
-//    }
+    // Deleting the address from the firestore
+    fun deleteAddress(address: Address) {
+
+        viewModelScope.launch { _deleteAddress.emit(Resource.Loading()) }
+
+        firestore.collection("user").document(auth.uid!!).collection("address")
+            .document(address.addressTitle)
+            .delete().addOnSuccessListener {
+                viewModelScope.launch { _deleteAddress.emit(Resource.Success(address)) }
+            }.addOnFailureListener {
+                viewModelScope.launch { _deleteAddress.emit(Resource.Error(it.message.toString())) }
+            }
+    }
 }
