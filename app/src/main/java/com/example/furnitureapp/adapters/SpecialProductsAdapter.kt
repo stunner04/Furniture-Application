@@ -20,6 +20,9 @@ class SpecialProductsAdapter :
                 Glide.with(itemView).load(product.images[0]).into(imgSpecialRV)
                 tvSpecialName.text = product.name
                 tvSpecialAdPrice.text = "Rs.${product.price}"
+                btnSeeProduct.setOnClickListener {
+                    onClick?.invoke(product)
+                }
             }
         }
     }
@@ -56,9 +59,6 @@ class SpecialProductsAdapter :
     override fun onBindViewHolder(holder: SpecialProductsViewHolder, position: Int) { // 1.5
         val product = differ.currentList[position]
         holder.bind(product)
-        holder.itemView.setOnClickListener {
-            onClick?.invoke(product)
-        }
     }
 
     var onClick: ((Product) -> Unit)? = null

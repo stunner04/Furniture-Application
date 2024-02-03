@@ -23,12 +23,15 @@ class BestDealsAdapter : RecyclerView.Adapter<BestDealsAdapter.BestDealViewHolde
                     val remainingPricePercentage = 1f - it
                     val priceAfterOffer = (remainingPricePercentage * (product.price)).formatPrice()
                     tvNewPrice.text = priceAfterOffer
-                       // "Rs. ${String.format("%.2f", priceAfterOffer)}"  // Rs. 3.93456 to Rs. 3.93
+                    // "Rs. ${String.format("%.2f", priceAfterOffer)}"  // Rs. 3.93456 to Rs. 3.93
                     tvOldPrice.paintFlags =
                         Paint.STRIKE_THRU_TEXT_FLAG // strike through the text (old price)
                 }
                 tvOldPrice.text = "Rs. ${product.price}"
                 tvDealProductName.text = product.name
+                btnSeeProduct.setOnClickListener {
+                    onClick?.invoke(product)
+                }
             }
         }
     }
@@ -59,9 +62,7 @@ class BestDealsAdapter : RecyclerView.Adapter<BestDealsAdapter.BestDealViewHolde
     override fun onBindViewHolder(holder: BestDealViewHolder, position: Int) {
         val product = differ.currentList[position]
         holder.bind(product)
-        holder.itemView.setOnClickListener {
-            onClick?.invoke(product)
-        }
     }
-    var onClick:((Product)->Unit)? = null
+
+    var onClick: ((Product) -> Unit)? = null
 }
