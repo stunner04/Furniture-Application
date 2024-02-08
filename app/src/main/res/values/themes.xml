@@ -1,6 +1,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.FurnitureApp" parent="Theme.Material3.Light.NoActionBar">
+        <!-- Force Light Mode. -->
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -16,4 +18,10 @@
     </style>
 
     <style name="Theme.FurnitureApp" parent="Base.Theme.FurnitureApp" />
+    <!-- For splash Screen -->
+    <style name="SpalshScreen" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimaryDark">#020D7C</item>
+        <item name="android:forceDarkAllowed" tools:targetApi="q">false</item>
+    </style>
+
 </resources>

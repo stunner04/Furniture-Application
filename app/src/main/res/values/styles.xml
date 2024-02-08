@@ -7,6 +7,12 @@
         <item name="android:textSize">@dimen/h4TextSize</item>
     </style>
 
+    <style name="splash">
+        <item name="android:fontFamily">@font/poppins_light</item>
+        <item name="android:textColor">#FFFFFF</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+
     <style name="h2">
         <item name="android:fontFamily">@font/poppins_light</item>
         <item name="android:textColor">@color/g_gray700</item>
