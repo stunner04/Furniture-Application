@@ -16,6 +16,7 @@ import com.example.furnitureapp.data.orders.getOrderStatus
 import com.example.furnitureapp.databinding.FragmentOrderDetailBinding
 import com.example.furnitureapp.util.VerticalItemDecoration
 import com.example.furnitureapp.util.formatPrice
+import com.example.furnitureapp.util.hideBottomNavigationView
 
 class OrderDetailFragment : Fragment() {
 
@@ -28,6 +29,7 @@ class OrderDetailFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        hideBottomNavigationView()
         binding = FragmentOrderDetailBinding.inflate(inflater)
         return binding.root
     }

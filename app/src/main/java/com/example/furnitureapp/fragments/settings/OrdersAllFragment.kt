@@ -16,6 +16,7 @@ import com.example.furnitureapp.adapters.OrdersAllAdapter
 import com.example.furnitureapp.data.orders.Order
 import com.example.furnitureapp.databinding.FragmentOrdersBinding
 import com.example.furnitureapp.util.Resource
+import com.example.furnitureapp.util.hideBottomNavigationView
 import com.example.furnitureapp.viemodel.OrdersAllGetViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -33,6 +34,7 @@ class OrdersAllFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+        hideBottomNavigationView()
         binding = FragmentOrdersBinding.inflate(inflater)
         return binding.root
     }
