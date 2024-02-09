@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.databinding.adapters.LinearLayoutBindingAdapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -13,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.furnitureapp.R
-import com.example.furnitureapp.activities.ShoppingActivity
 import com.example.furnitureapp.adapters.ColorsAdapter
 import com.example.furnitureapp.adapters.SizesAdapter
 import com.example.furnitureapp.adapters.ViewPager2ImagesAdapter
@@ -22,10 +20,10 @@ import com.example.furnitureapp.databinding.FragmentProductDetailsBinding
 import com.example.furnitureapp.util.Resource
 import com.example.furnitureapp.util.hideBottomNavigationView
 import com.example.furnitureapp.viemodel.DetailsViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationItemView
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
+import io.github.vejei.viewpagerindicator.indicator.CircleIndicator
 import kotlinx.coroutines.flow.collectLatest
+import java.util.HashMap;
 
 @AndroidEntryPoint
 class ProductDetailsFragment : Fragment() {
@@ -39,7 +37,7 @@ class ProductDetailsFragment : Fragment() {
     // For ADD TO CART functionality
     private var selectedColor: Int? = null
     private var selectedSize: String? = null
-    private val viewmodel by viewModels<DetailsViewModel> ()
+    private val viewmodel by viewModels<DetailsViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,7 +66,7 @@ class ProductDetailsFragment : Fragment() {
         }
 
         // selecting the size on clicking the sizes RV list
-        sizesAdapter.onItemClick ={
+        sizesAdapter.onItemClick = {
             selectedSize = it
         }
 
@@ -80,24 +78,26 @@ class ProductDetailsFragment : Fragment() {
         // Click Listener for the ADD TO CART btn
         binding.btnAddToCart.setOnClickListener {
             // We can add If else statements for the ENFORCING THE SELECTION of the products then it will be added only.
-            viewmodel.addUpdateProductInCart(CartProduct(product,1,selectedColor,selectedSize))
+            viewmodel.addUpdateProductInCart(CartProduct(product, 1, selectedColor, selectedSize))
         }
 
         lifecycleScope.launchWhenStarted {
             viewmodel.addToCart.collectLatest {
-                when(it)
-                {
+                when (it) {
                     is Resource.Loading -> {
                         binding.btnAddToCart.startAnimation()
                     }
+
                     is Resource.Success -> {
                         binding.btnAddToCart.revertAnimation()
                         binding.btnAddToCart.setBackgroundColor(resources.getColor(R.color.black))
                     }
+
                     is Resource.Error -> {
                         binding.btnAddToCart.stopAnimation()
-                        Toast.makeText(requireContext(),it.message,Toast.LENGTH_SHORT).show()
+                        Toast.makeText(requireContext(), it.message, Toast.LENGTH_SHORT).show()
                     }
+
                     else -> Unit
                 }
             }
@@ -125,6 +125,10 @@ class ProductDetailsFragment : Fragment() {
     private fun setupViewPager() {
         binding.apply {
             viewPagerProductImages.adapter = viewPager2ImagesAdapter
+            // Setup the viewpager Indicator
+            circleIndicator.setWithViewPager2(binding.viewPagerProductImages)
+            circleIndicator.itemCount = (args.product.images).size
+            circleIndicator.setAnimationMode(CircleIndicator.AnimationMode.SCALE)
         }
     }
 
