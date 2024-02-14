@@ -15,12 +15,6 @@ data class CartProduct(
     val selectedColor: Int? = null,
     val selectedSize: String? = null
 ) :Parcelable {
-    fun copy(quantity: Int): Int {
-        val newQuantity = quantity
-        this.quantity = newQuantity
-        return newQuantity
-    }
-
     constructor() : this(Product(), 1, null, null)
 
 }
