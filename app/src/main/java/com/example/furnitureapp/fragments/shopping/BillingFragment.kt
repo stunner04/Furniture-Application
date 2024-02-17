@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -174,25 +175,26 @@ class BillingFragment : Fragment(R.layout.fragment_billing) {
     }
 
     private fun showOrderConfirmationDialog() {
-        val alertDialog = AlertDialog.Builder(requireContext()).apply {
-            setTitle("Order Items")
-            setMessage("Are you sure you want to order your cart items?")
-            setNegativeButton("Cancel") { dialog, _ ->
-                dialog.dismiss()
-            }
-            // Calls the place order function to add the order in the firestore when OK clicked on the dialog
-            setPositiveButton("Ok") { dialog, _ ->
-                val order = Order(
-                    OrderStatus.Ordered.status,
-                    products = billingProductList,
-                    address = selectedAddress!!,
-                    totalPrice = totalPrice,
-                )
-                orderViewModel.placeOrder(order)
-                dialog.dismiss()
-            }
+        val alertDialog = AlertDialog.Builder(requireContext()).create()
+        alertDialog.setTitle("")
+        val view =
+            LayoutInflater.from(context).inflate(R.layout.place_order_alert_dialog, null, false)
+        alertDialog.setView(view)
+
+        view.findViewById<Button>(R.id.btn_no).setOnClickListener {
+            alertDialog.dismiss()
         }
-        alertDialog.create()
+
+        view.findViewById<Button>(R.id.btn_yes).setOnClickListener {
+            val order = Order(
+                OrderStatus.Ordered.status,
+                products = billingProductList,
+                address = selectedAddress!!,
+                totalPrice = totalPrice,
+            )
+            orderViewModel.placeOrder(order)
+            alertDialog.dismiss()
+        }
         alertDialog.show()
     }
 
