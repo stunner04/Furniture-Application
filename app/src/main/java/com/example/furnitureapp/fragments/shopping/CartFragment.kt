@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -81,20 +82,21 @@ class CartFragment : Fragment(R.layout.fragment_cart) {
 
         // Display the AlertDialog Box when the quantity reaches < 1
         lifecycleScope.launchWhenStarted {
-            viewModel.deleteDialog.collectLatest {
-                val alertDialog =
-                    AlertDialog.Builder(requireContext()).apply {
-                        setTitle("Delete item from cart")
-                        setMessage("Do you want to delete this item from your cart?")
-                        setNegativeButton("Cancel") { dialog, _ ->
-                            dialog.dismiss()
-                        }
-                        setPositiveButton("Yes") { dialog, _ ->
-                            viewModel.deleteCartProduct(it)
-                            dialog.dismiss()
-                        }
-                    }
-                alertDialog.create()
+            viewModel.deleteDialog.collectLatest { cartProduct ->
+                val alertDialog = AlertDialog.Builder(requireContext()).create()
+                alertDialog.setTitle("")
+                val view =
+                    LayoutInflater.from(context).inflate(R.layout.delete_alert_dialog, null, false)
+                alertDialog.setView(view)
+
+                view.findViewById<Button>(R.id.btn_no).setOnClickListener {
+                    alertDialog.dismiss()
+                }
+
+                view.findViewById<Button>(R.id.btn_yes).setOnClickListener {
+                    viewModel.deleteCartProduct(cartProduct)
+                    alertDialog.dismiss()
+                }
                 alertDialog.show()
             }
         }
